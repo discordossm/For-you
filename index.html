@@ -584,8 +584,6 @@ function refreshUI(){
   }
   renderFavs();
 }
-setMode("login");
-refreshUI();
 
 /* =========================================================
    3.5) FAVORİLER (filmler / şarkılar / oyunlar)
@@ -672,6 +670,10 @@ contactForm.addEventListener("submit",async e=>{
     else { contactStatus.textContent="bir sorun oldu, tekrar dener misin?"; }
   }catch(_){ contactStatus.textContent="bağlantı yok galiba, tekrar dene."; }
 });
+
+/* Her şey tanımlandıktan SONRA arayüzü kur (yoksa FAV_CATS henüz hazır olmaz) */
+setMode("login");
+refreshUI();
 </script>
 </body>
 </html>
