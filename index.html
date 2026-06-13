@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Senin İçin</title>
+<style>
+  :root{
+    --bg1:#efe6fb;
+    --bg2:#e7dcf9;
+    --bg3:#f3ecfc;
+    --ink:#4f4b57;
+    --ink-soft:#8a8a96;
+    --card:#ffffffcc;
+    --accent:#7e9cd8;
+    --accent2:#86c7b8;
+    --accent3:#9a8fd8;
+    --shadow:0 10px 30px rgba(140,120,160,.15);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    color:var(--ink);
+    background:linear-gradient(160deg,var(--bg1),var(--bg2) 45%,var(--bg3));
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-weight:600;letter-spacing:.3px;}
+  section{padding:70px 22px;max-width:1100px;margin:0 auto;}
+
+  /* ---------- HERO ---------- */
+  #hero{
+    position:relative;height:100vh;min-height:560px;
+    padding:0;max-width:none;margin:0;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+  }
+  #flowerCanvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;}
+  .hero-inner{
+    position:relative;z-index:2;background:rgba(255,255,255,.55);
+    backdrop-filter:blur(6px);padding:28px 34px;border-radius:26px;
+    box-shadow:var(--shadow);max-width:520px;margin:0 18px;
+  }
+  .cat-gif{width:280px;max-width:85%;height:auto;display:block;margin:6px auto 16px;border-radius:18px;}
+  .hero-inner h1{font-size:clamp(26px,5vw,40px);margin:.1em 0 .25em;}
+  .hero-inner p{margin:.2em 0;color:var(--ink-soft);font-size:16px;}
+  .flower-name{font-size:13px;color:var(--accent);letter-spacing:1px;text-transform:uppercase;}
+
+  .scroll-hint{
+    position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
+    z-index:3;text-align:center;color:var(--ink-soft);font-size:13px;
+    animation:bob 1.8s ease-in-out infinite;
+  }
+  .scroll-hint .arrow{
+    display:block;width:26px;height:26px;margin:6px auto 0;
+    border-right:3px solid var(--accent);border-bottom:3px solid var(--accent);
+    transform:rotate(45deg);border-radius:2px;
+  }
+  @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(8px);}}
+
+  /* ---------- SECTION TITLES ---------- */
+  .sec-title{text-align:center;font-size:clamp(22px,4vw,30px);margin-bottom:8px;}
+  .sec-sub{text-align:center;color:var(--ink-soft);margin:0 auto 34px;max-width:560px;line-height:1.6;}
+
+  /* ---------- 100 SEBEP ---------- */
+  #reasons{padding-bottom:40px;}
+  .reasons-track{
+    display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;
+    padding:12px 6px 26px;-webkit-overflow-scrolling:touch;
+  }
+  .reasons-track::-webkit-scrollbar{height:8px;}
+  .reasons-track::-webkit-scrollbar-thumb{background:#d9cfe6;border-radius:99px;}
+  .reason-card{
+    scroll-snap-align:center;flex:0 0 300px;min-height:200px;
+    background:var(--card);backdrop-filter:blur(4px);border-radius:22px;
+    box-shadow:var(--shadow);padding:26px 24px;display:flex;flex-direction:column;
+    justify-content:center;gap:12px;border:1px solid #ffffff80;
+  }
+  .reason-num{font-size:13px;color:var(--accent);letter-spacing:1px;}
+  .reason-text{font-size:19px;line-height:1.5;}
+  .swipe-hint{text-align:center;color:var(--ink-soft);font-size:13px;}
+  .swipe-hint span{display:inline-block;animation:slide 1.6s ease-in-out infinite;}
+  @keyframes slide{0%,100%{transform:translateX(0);}50%{transform:translateX(7px);}}
+
+  /* ---------- KÜÇÜK ADIMLAR + NOTLAR ---------- */
+  #steps .quote{
+    text-align:center;font-size:clamp(19px,3.4vw,26px);line-height:1.6;
+    max-width:640px;margin:0 auto 14px;font-weight:600;color:#6a5f76;
+  }
+  #steps .quote small{display:block;font-weight:400;font-size:16px;color:var(--ink-soft);margin-top:12px;}
+
+  .notes-box{
+    margin:34px auto 0;max-width:560px;background:var(--card);backdrop-filter:blur(4px);
+    border-radius:22px;box-shadow:var(--shadow);padding:26px;border:1px solid #ffffff80;
+  }
+  .notes-box h3{margin:0 0 4px;font-size:20px;}
+  .notes-box .who{color:var(--ink-soft);font-size:13px;margin-bottom:16px;}
+  .note-input{display:flex;gap:8px;margin-bottom:16px;}
+  input[type=text],textarea,input[type=password]{
+    width:100%;border:1px solid #e6dcef;border-radius:14px;padding:12px 14px;
+    font-size:15px;font-family:inherit;color:var(--ink);background:#fff;outline:none;
+  }
+  input:focus,textarea:focus{border-color:var(--accent);}
+  button{
+    cursor:pointer;border:none;border-radius:14px;padding:12px 18px;font-size:15px;
+    font-family:inherit;font-weight:600;color:#fff;
+    background:linear-gradient(135deg,var(--accent),var(--accent3));
+    box-shadow:0 6px 16px rgba(190,166,231,.35);transition:transform .12s ease,opacity .2s;
+  }
+  button:hover{transform:translateY(-1px);}
+  button.ghost{background:none;color:var(--accent3);box-shadow:none;padding:8px 6px;font-weight:600;}
+  ul.note-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;}
+  ul.note-list li{
+    display:flex;align-items:flex-start;gap:10px;background:#faf6fe;border-radius:14px;
+    padding:12px 14px;font-size:15px;line-height:1.45;
+  }
+  ul.note-list li .check{cursor:pointer;flex:0 0 auto;width:22px;height:22px;border-radius:7px;
+    border:2px solid var(--accent);display:inline-flex;align-items:center;justify-content:center;
+    font-size:14px;color:#fff;user-select:none;}
+  ul.note-list li.done .check{background:var(--accent);}
+  ul.note-list li.done .txt{text-decoration:line-through;color:var(--ink-soft);}
+  ul.note-list li .del{margin-left:auto;cursor:pointer;color:#d6b3c8;font-size:18px;line-height:1;background:none;border:none;box-shadow:none;padding:0 4px;}
+  .locked-msg{text-align:center;color:var(--ink-soft);padding:18px 0;}
+
+  /* ---------- FAVORİLER ---------- */
+  .fav-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:900px;margin:0 auto;}
+  .fav-card{margin:0;}
+  .fav-card h3{margin:0 0 14px;font-size:19px;}
+  .fav-card .note-input input{font-size:14px;}
+  .send-favs-wrap{text-align:center;margin-top:26px;}
+  .send-note{color:var(--ink-soft);font-size:13px;margin-top:10px;}
+  @media(max-width:760px){ .fav-grid{grid-template-columns:1fr;max-width:560px;} }
+
+  /* ---------- İLETİŞİM ---------- */
+  #contact .notes-box{max-width:560px;}
+  textarea{min-height:120px;resize:vertical;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:13px;color:var(--ink-soft);margin-bottom:6px;}
+
+  /* ---------- LOGIN MODAL ---------- */
+  .modal-back{
+    position:fixed;inset:0;background:rgba(90,80,110,.35);backdrop-filter:blur(3px);
+    display:none;align-items:center;justify-content:center;z-index:50;padding:20px;
+  }
+  .modal-back.show{display:flex;}
+  .modal{
+    background:#fff;border-radius:24px;box-shadow:0 20px 60px rgba(80,60,100,.3);
+    padding:30px 28px;max-width:380px;width:100%;text-align:center;
+  }
+  .modal h3{margin:0 0 4px;font-size:22px;}
+  .modal p{color:var(--ink-soft);font-size:14px;margin:0 0 20px;}
+  .modal .field{text-align:left;}
+  .modal .err{color:#d57aa0;font-size:13px;min-height:18px;margin:2px 0 8px;}
+  .modal button{width:100%;margin-top:6px;}
+  .modal .switch{margin-top:14px;font-size:14px;color:var(--ink-soft);}
+  .modal .switch a{color:var(--accent3);cursor:pointer;font-weight:600;}
+
+  .topbar{
+    position:fixed;top:14px;right:14px;z-index:40;display:flex;gap:8px;align-items:center;
+    background:rgba(255,255,255,.7);backdrop-filter:blur(6px);padding:6px 8px 6px 14px;
+    border-radius:99px;box-shadow:var(--shadow);font-size:14px;color:var(--ink);
+  }
+  .topbar button{padding:7px 14px;font-size:13px;}
+
+  footer{text-align:center;padding:30px;color:var(--ink-soft);font-size:13px;}
+
+  @media(max-width:640px){
+    .reason-card{flex-basis:78vw;}
+    section{padding:54px 18px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ÜST BAR (giriş durumu) -->
+<div class="topbar" id="topbar">
+  <span id="userLabel">Misafir</span>
+  <button id="authBtn">Giriş yap</button>
+</div>
+
+<!-- ====== HERO: PİKSEL ÇİÇEKLER ====== -->
+<header id="hero">
+  <canvas id="flowerCanvas"></canvas>
+  <div class="hero-inner">
+    <img src="cat.gif" alt="el sallayan sevimli kedi" class="cat-gif" />
+    <p id="catLine">bu kedi sana el sallıyor. evet, sana.</p>
+  </div>
+  <div class="scroll-hint">
+    aşağı kaydır
+    <span class="arrow"></span>
+  </div>
+</header>
+
+<!-- ====== 100 SEBEP ====== -->
+<section id="reasons">
+  <h2 class="sec-title">Yaşamak için 100 sebep</h2>
+  <p class="sec-sub">bazı günler unutuluyor işte. sağa kaydır, hatırlatma niyetine. 👉</p>
+  <div class="reasons-track" id="reasonsTrack"></div>
+  <p class="swipe-hint"><span>← kaydır →</span></p>
+</section>
+
+<!-- ====== KÜÇÜK ADIMLAR + NOTLAR ====== -->
+<section id="steps">
+  <p class="quote">
+    kocaman planlara gerek yok. ufak ufak iyi şeyler yeter.
+    <small>bir bardak su iç, biraz gerin, sevdiğin şarkıyı aç. olduğu kadar 🤷</small>
+  </p>
+
+  <div class="notes-box">
+    <h3>Bugün yapmak istediğim şeyler</h3>
+    <p class="who" id="notesWho"></p>
+    <div id="notesLocked" class="locked-msg">
+      Notların yalnızca sana özel. Görüp eklemek için <a href="#" id="loginFromNotes" style="color:var(--accent3);font-weight:600;">giriş yap</a>.
+    </div>
+    <div id="notesArea" style="display:none;">
+      <div class="note-input">
+        <input type="text" id="noteText" placeholder="Bugün ne yapmak istersin?" />
+        <button id="addNote">Ekle</button>
+      </div>
+      <ul class="note-list" id="noteList"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FAVORİLER ====== -->
+<section id="favs">
+  <h2 class="sec-title">Birbirimizi tanıyalım mı?</h2>
+  <p class="sec-sub">en sevdiklerini at buraya. istersen bana da yolla, merak ediyorum valla. 👀</p>
+  <div class="fav-grid">
+    <div class="notes-box fav-card">
+      <h3>🎬 Filmler</h3>
+      <div class="note-input">
+        <input type="text" id="filmInput" placeholder="En sevdiğin film..." />
+        <button data-cat="films">Ekle</button>
+      </div>
+      <ul class="note-list" id="filmsList"></ul>
+    </div>
+    <div class="notes-box fav-card">
+      <h3>🎵 Şarkılar</h3>
+      <div class="note-input">
+        <input type="text" id="songInput" placeholder="En sevdiğin şarkı..." />
+        <button data-cat="songs">Ekle</button>
+      </div>
+      <ul class="note-list" id="songsList"></ul>
+    </div>
+    <div class="notes-box fav-card">
+      <h3>🎮 Oyunlar</h3>
+      <div class="note-input">
+        <input type="text" id="gameInput" placeholder="En sevdiğin oyun..." />
+        <button data-cat="games">Ekle</button>
+      </div>
+      <ul class="note-list" id="gamesList"></ul>
+    </div>
+  </div>
+  <div class="send-favs-wrap">
+    <button id="sendFavs">Bunları bana gönder ✉️</button>
+    <p class="send-note">listen bu cihazda kayıtlı kalır; göndere basınca direkt bana ulaşır.</p>
+    <p class="send-note" id="favStatus"></p>
+  </div>
+</section>
+
+<!-- ====== İLETİŞİM ====== -->
+<section id="contact">
+  <h2 class="sec-title">buranın yapımcısına yaz (yani bana)</h2>
+  <p class="sec-sub">bir şey sormak, demek ya da sadece "selam" atmak istersen buyur. 📨</p>
+  <div class="notes-box">
+    <form id="contactForm">
+      <div class="field">
+        <label>Adın (istersen)</label>
+        <input type="text" id="cName" placeholder="..." />
+      </div>
+      <div class="field">
+        <label>Mesajın</label>
+        <textarea id="cMsg" placeholder="Buraya yaz..."></textarea>
+      </div>
+      <button type="submit">Gönder ✉️</button>
+      <p class="send-note" id="contactStatus"></p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  senin için sevgiyle yapıldı · el yapımı, bug'lar ücretsiz
+</footer>
+
+<!-- ====== GİRİŞ / KAYIT MODAL ====== -->
+<div class="modal-back" id="modal">
+  <div class="modal">
+    <h3 id="modalTitle">Tekrar hoş geldin</h3>
+    <p id="modalSub">Notların seni bekliyor.</p>
+    <div class="field">
+      <input type="text" id="mUser" placeholder="İsmin" autocomplete="username" />
+    </div>
+    <div class="field">
+      <input type="password" id="mPass" placeholder="Şifren" autocomplete="current-password" />
+    </div>
+    <div class="err" id="mErr"></div>
+    <button id="mSubmit">Giriş yap</button>
+    <div class="switch" id="mSwitch">İlk defa mı? <a id="mToggle">Hesap oluştur</a></div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   1) PİKSEL ÇİÇEK TARLASI (canvas)
+   ========================================================= */
+const flowers = {
+  papatya:{ name:"papatya", petal:"#ffffff", petal2:"#f4f4f8", center:"#ffd66b", stem:"#9cc79a", leaf:"#7fbf86" },
+  gul:    { name:"gül",     petal:"#f3a6c0", petal2:"#e887ac", center:"#d76e95", stem:"#9cc79a", leaf:"#7fbf86" },
+  lale:   { name:"lale",    petal:"#e9a7e0", petal2:"#d889d0", center:"#c773bf", stem:"#9cc79a", leaf:"#7fbf86" },
+  lavanta:{ name:"lavanta", petal:"#bda6e7", petal2:"#a98fdc", center:"#8f74cc", stem:"#9cc79a", leaf:"#7fbf86" },
+  nilufer:{ name:"nilüfer", petal:"#a6c4e7", petal2:"#8db2df", center:"#ffd66b", stem:"#9cc79a", leaf:"#7fbf86" }
+};
+
+// sprite: . boş, P taç, Q taç koyu, C orta, S sap, L yaprak
+const shapeRound = [
+  "...PPP...",
+  "..PQPQP..",
+  ".PPPCPPP.",
+  ".PQPCPQP.",
+  ".PPPCPPP.",
+  "..PQPQP..",
+  "...PPP...",
+  "....S....",
+  "...LSL...",
+  "..L.S.L..",
+  "....S....",
+  "....S...."
+];
+const shapeTulip = [
+  "..P.P.P..",
+  ".PQ.P.QP.",
+  ".PPPPPPP.",
+  ".PQPCPQP.",
+  ".PPPPPPP.",
+  "..PPPPP..",
+  "...PPP...",
+  "....S....",
+  "...LS....",
+  "....SL...",
+  "....S....",
+  "....S...."
+];
+
+const flowerKeys = Object.keys(flowers);
+const pick = flowerKeys[Math.floor(Math.random()*flowerKeys.length)];
+const sprite = Math.random()<0.5 ? shapeRound : shapeTulip;
+
+// kedi altı: her açılışta rastgele, ciddiyetsiz yazı
+const catLines=[
+  "bu kedi sana el sallıyor. evet, sana.",
+  "buranın maskotu bu. tek görevi el sallamak.",
+  "kedi geldi, ortam şenlendi 🐾",
+  "%100 el yapımı, sana özel el sallayan kedi",
+  "değerlisin falan diyorlar, kedi de onaylıyor 🐱",
+  "bu kediye maaş veremiyoruz, sadece el sallıyor"
+];
+document.getElementById("catLine").textContent = catLines[Math.floor(Math.random()*catLines.length)];
+
+const canvas = document.getElementById("flowerCanvas");
+const ctx = canvas.getContext("2d");
+let cells = []; // her çiçeğin konumu/fazı
+
+function colorFor(ch,f){
+  switch(ch){
+    case "P":return f.petal;
+    case "Q":return f.petal2;
+    case "C":return f.center;
+    case "S":return f.stem;
+    case "L":return f.leaf;
+  }
+  return null;
+}
+
+function layout(){
+  const dpr = Math.min(window.devicePixelRatio||1,2);
+  canvas.width = innerWidth*dpr;
+  canvas.height = innerHeight*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  // çiçek tarlası ızgarası
+  cells = [];
+  const spacing = innerWidth<640 ? 115 : 155;
+  for(let y=-20;y<innerHeight+spacing;y+=spacing){
+    for(let x=-20;x<innerWidth+spacing;x+=spacing){
+      const jx=(Math.random()-0.5)*30, jy=(Math.random()-0.5)*30;
+      cells.push({
+        x:x+jx, y:y+jy,
+        px: innerWidth<640 ? 3 : 4,              // piksel boyu
+        depth: 0.6+Math.random()*0.8,            // 3B derinlik hissi
+        phase: Math.random()*Math.PI*2
+      });
+    }
+  }
+}
+
+function drawFlower(c,t){
+  const f=flowers[pick];
+  const sway = Math.sin(t/900 + c.phase)*3*c.depth;     // hafif rüzgar
+  const bob  = Math.cos(t/1100 + c.phase)*2*c.depth;    // yukarı-aşağı
+  const px = c.px*c.depth;                              // derinlik = boyut
+  const w = sprite[0].length, h = sprite.length;
+  const ox = c.x - (w*px)/2 + sway;
+  const oy = c.y - (h*px)/2 + bob;
+  for(let r=0;r<h;r++){
+    for(let col=0;col<sprite[r].length;col++){
+      const ch = sprite[r][col];
+      if(ch===".") continue;
+      // gölge (3B his)
+      ctx.fillStyle = "rgba(120,100,140,0.10)";
+      ctx.fillRect(Math.round(ox+col*px+1.5), Math.round(oy+r*px+1.5), Math.ceil(px), Math.ceil(px));
+      ctx.fillStyle = colorFor(ch,f);
+      ctx.fillRect(Math.round(ox+col*px), Math.round(oy+r*px), Math.ceil(px), Math.ceil(px));
+    }
+  }
+}
+
+let mouseX=0, mouseY=0;
+addEventListener("mousemove",e=>{ mouseX=(e.clientX/innerWidth-0.5); mouseY=(e.clientY/innerHeight-0.5); });
+
+function loop(t){
+  ctx.clearRect(0,0,innerWidth,innerHeight);
+  // arka plan yumuşak ışık
+  const g=ctx.createRadialGradient(innerWidth*0.5,innerHeight*0.3,40,innerWidth*0.5,innerHeight*0.5,innerWidth*0.8);
+  g.addColorStop(0,"rgba(255,255,255,0.35)");
+  g.addColorStop(1,"rgba(255,255,255,0)");
+  ctx.fillStyle=g; ctx.fillRect(0,0,innerWidth,innerHeight);
+  // derinliğe göre sırala (uzaktakiler önce)
+  for(const c of cells){
+    const par = c.depth*8; // parallax
+    const saved={x:c.x,y:c.y};
+    c.x += mouseX*par; c.y += mouseY*par;
+    drawFlower(c,t);
+    c.x=saved.x; c.y=saved.y;
+  }
+  requestAnimationFrame(loop);
+}
+layout();
+addEventListener("resize",layout);
+requestAnimationFrame(loop);
+
+/* =========================================================
+   2) YAŞAMAK İÇİN 100 SEBEP
+   ========================================================= */
+const reasons = [
+"Sabah ilk yudum kahvenin kokusu için.","Sevdiğin bir şarkının tam o nakarat anı için.","Yağmurdan sonra havanın o temiz kokusu için.",
+"Henüz okumadığın kitaplar için.","Henüz gitmediğin şehirler için.","Bir hayvanın sana güvenerek yaklaşması için.",
+"İçten kahkaha atınca karın ağrıman için.","Geç kalınan ama unutulmayan sohbetler için.","Gün batımının her gün farklı olması için.",
+"Yeni öğreneceğin bir şeyin verdiği heyecan için.","Birinin 'iyi ki varsın' demesi için.","Sımsıcak bir battaniyenin altına girmek için.",
+"Yıllar sonra bugünü gülümseyerek anacağın için.","Daha tatmadığın yemekler için.","Birine sarılmanın verdiği güven için.",
+"Kendi başına başardığın küçük zaferler için.","Mevsimlerin değişmesini izlemek için.","Çocukken sevdiğin bir şeyi tekrar yapmak için.",
+"Gece gökyüzünde bir yıldız kayması için.","Beklemediğin bir iltifatın günü değiştirmesi için.","Taze ekmeğin sıcaklığı için.",
+"Eski bir fotoğrafa bakıp gülümsemek için.","Birine yardım edip içinin ısınması için.","Henüz tanışmadığın insanlar için.",
+"Sahilde dalgaların sesi için.","Sabah uyanınca 'bugün benim' diyebilmek için.","Sevdiklerinle aynı masada gülüşmek için.",
+"Bir filmin sonunda gözlerinin dolması için.","İlk kar yağışını izlemek için.","Kendi ellerinle bir şey yapmanın gururu için.",
+"Çiçeklerin baharda yeniden açması için.","Birinin seni dinlerken gözlerini kaçırmaması için.","Uzun bir günün sonunda yatağa uzanmak için.",
+"Hiç beklemediğin anda gelen iyi haberler için.","Sıcak çorbanın buharı için.","Bir dostun sesini duymak için.",
+"Yeni bir defterin ilk boş sayfası için.","Gülümsemenin birine bulaşması için.","Sabah kuş seslerine uyanmak için.",
+"Tatlı bir yorgunluğun ardından gelen uyku için.","Henüz dans etmediğin şarkılar için.","Birine sürpriz yapmanın heyecanı için.",
+"Eski bir arkadaşla yıllar sonra karşılaşmak için.","Denizde ilk dalış anının serinliği için.","Sevdiğin kokuyu hatırlatan bir an için.",
+"Henüz yaşamadığın o güzel tesadüfler için.","Bir bebeğin ilk gülüşü için.","Gece sessizliğinde kendinle baş başa kalmak için.",
+"Birinin senin için endişelenmesi için.","Yorulduğunda dinlenebileceğin bir yerin olması için.","Yeni başlangıçların her zaman mümkün olması için.",
+"Camda yağmur damlalarını izlemek için.","Sıcak bir duşun rahatlığı için.","Kendine kızdığın bir günün ertesi sabahı için.",
+"Beklenmedik bir mesajla gülümsemek için.","Sevdiğin yemeğin kokusunun eve yayılması için.","Birinin elini tutmanın sıcaklığı için.",
+"Henüz keşfetmediğin müzikler için.","Güneşin tenine değmesi için.","Bir şeyi ilk kez başarmanın tadı için.",
+"Uzun yürüyüşlerde düşüncelerin dağılması için.","Geceyarısı atıştırmalıklarının suçlu lezzeti için.","Birinin seni olduğun gibi sevmesi için.",
+"Kahkaha atarken çıkardığın o garip ses için.","Yeni bir mevsime başlamak için.","Sımsıcak bir 'günaydın' mesajı için.",
+"Sevdiğin bir diziye devam etmek için.","Yorgunken birinin sana kahve yapması için.","İçindeki çocuğu hatırladığın anlar için.",
+"Bir hedefe doğru yol almanın heyecanı için.","Penceredeki bir kedinin seni izlemesi için.","Gökkuşağını görünce duraklamak için.",
+"Sevdiğin parfümü sıkmanın küçük ritüeli için.","Birine 'seni özledim' diyebilmek için.","Yeni bir yılın getireceği bilinmezlik için.",
+"Sabahları esneyip gerinmenin keyfi için.","Sıcak kumda yürümek için.","Bir arkadaşının başarısına sevinmek için.",
+"Henüz tatmadığın dondurma çeşitleri için.","Gece arabada cam açık şarkı söylemek için.","Birinin gülüşünün senin gününü kurtarması için.",
+"Eski şarkıların seni bir anıya götürmesi için.","Sevdiğin birinin sesiyle gülmesi için.","Kendi kendine 'aferin' diyebildiğin anlar için.",
+"Bahar dallarındaki ilk tomurcuklar için.","Bir şeyi merak edip öğrenmenin tadı için.","Geceleri pencereden şehrin ışıklarını izlemek için.",
+"Birinin senin için yer ayırması için.","Yeni bir hobiye başlamanın heyecanı için.","Sımsıcak çayın elini ısıtması için.",
+"Henüz yazılmamış anıların için.","Birine ilham olabileceğin için.","Sevdiğin bir kokunun aniden burnuna gelmesi için.",
+"Sabahın o sessiz, herkesten önce uyanılan anı için.","Bir şeyi bırakmayı başardığın gün için.","Sana 'iyi ki tanımışım' diyecek biri için.",
+"Henüz görmediğin gün doğumları için.","Kendine verdiğin küçük sözleri tutmak için.","Ve sadece sen olduğun için. 🌸"
+];
+const track=document.getElementById("reasonsTrack");
+// her yenilemede sırayı karıştır (Fisher-Yates)
+const shuffled=[...reasons];
+for(let i=shuffled.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];
+}
+shuffled.forEach((r,i)=>{
+  const card=document.createElement("div");
+  card.className="reason-card";
+  card.innerHTML=`<div class="reason-num">${String(i+1).padStart(3,"0")} / 100</div><div class="reason-text">${r}</div>`;
+  track.appendChild(card);
+});
+
+/* =========================================================
+   3) ÜYELİK + NOTLAR (localStorage)
+   ========================================================= */
+const LS_USERS="cc_users", LS_SESSION="cc_session";
+const users = JSON.parse(localStorage.getItem(LS_USERS)||"{}");
+let current = localStorage.getItem(LS_SESSION) || null;
+
+const modal=document.getElementById("modal");
+const mUser=document.getElementById("mUser"), mPass=document.getElementById("mPass");
+const mErr=document.getElementById("mErr"), mSubmit=document.getElementById("mSubmit");
+const mTitle=document.getElementById("modalTitle"), mSub=document.getElementById("modalSub");
+const mSwitch=document.getElementById("mSwitch"), mToggle=document.getElementById("mToggle");
+let mode="login";
+
+function enc(s){ return btoa(unescape(encodeURIComponent(s))); } // basit gizleme (gerçek güvenlik değil)
+
+function openModal(){ modal.classList.add("show"); mErr.textContent=""; mUser.focus(); }
+function closeModal(){ modal.classList.remove("show"); }
+function setMode(m){
+  mode=m;
+  if(m==="login"){ mTitle.textContent="Tekrar hoş geldin"; mSub.textContent="Notların seni bekliyor."; mSubmit.textContent="Giriş yap"; mSwitch.innerHTML='İlk defa mı? <a id="mToggle">Hesap oluştur</a>'; }
+  else { mTitle.textContent="Sana özel bir köşe"; mSub.textContent="İsmini ve bir şifre belirle, notların sadece sana kalsın."; mSubmit.textContent="Hesap oluştur"; mSwitch.innerHTML='Zaten var mı? <a id="mToggle">Giriş yap</a>'; }
+  document.getElementById("mToggle").onclick=()=>setMode(m==="login"?"register":"login");
+  mErr.textContent="";
+}
+mToggle.onclick=()=>setMode("register");
+
+mSubmit.onclick=()=>{
+  const u=mUser.value.trim(), p=mPass.value;
+  if(!u||!p){ mErr.textContent="İsim ve şifre gerekli."; return; }
+  if(mode==="register"){
+    if(users[u.toLowerCase()]){ mErr.textContent="Bu isim zaten alınmış, giriş yapmayı dene."; return; }
+    users[u.toLowerCase()]={name:u, pass:enc(p), notes:[]};
+    localStorage.setItem(LS_USERS,JSON.stringify(users));
+  } else {
+    const rec=users[u.toLowerCase()];
+    if(!rec || rec.pass!==enc(p)){ mErr.textContent="İsim ya da şifre yanlış."; return; }
+  }
+  current=u.toLowerCase();
+  localStorage.setItem(LS_SESSION,current);
+  mPass.value="";
+  closeModal();
+  refreshUI();
+};
+mPass.addEventListener("keydown",e=>{ if(e.key==="Enter") mSubmit.click(); });
+
+function logout(){ current=null; localStorage.removeItem(LS_SESSION); refreshUI(); }
+
+// üst bar + giriş butonları
+document.getElementById("authBtn").onclick=()=> current?logout():(setMode("login"),openModal());
+document.getElementById("loginFromNotes").onclick=e=>{ e.preventDefault(); setMode("login"); openModal(); };
+modal.addEventListener("click",e=>{ if(e.target===modal) closeModal(); });
+
+// NOTLAR
+const noteList=document.getElementById("noteList");
+const noteText=document.getElementById("noteText");
+function saveUsers(){ localStorage.setItem(LS_USERS,JSON.stringify(users)); }
+function renderNotes(){
+  if(!current) return;
+  const rec=users[current];
+  noteList.innerHTML="";
+  rec.notes.forEach((n,i)=>{
+    const li=document.createElement("li");
+    if(n.done) li.className="done";
+    li.innerHTML=`<span class="check">${n.done?"✓":""}</span><span class="txt">${n.text}</span><button class="del">×</button>`;
+    li.querySelector(".check").onclick=()=>{ n.done=!n.done; saveUsers(); renderNotes(); };
+    li.querySelector(".del").onclick=()=>{ rec.notes.splice(i,1); saveUsers(); renderNotes(); };
+    noteList.appendChild(li);
+  });
+}
+document.getElementById("addNote").onclick=()=>{
+  const t=noteText.value.trim(); if(!t||!current) return;
+  users[current].notes.push({text:t,done:false}); saveUsers(); noteText.value=""; renderNotes();
+};
+noteText.addEventListener("keydown",e=>{ if(e.key==="Enter") document.getElementById("addNote").click(); });
+
+function refreshUI(){
+  const label=document.getElementById("userLabel");
+  const authBtn=document.getElementById("authBtn");
+  const locked=document.getElementById("notesLocked");
+  const area=document.getElementById("notesArea");
+  const who=document.getElementById("notesWho");
+  if(current){
+    const name=users[current].name;
+    label.textContent=name+" 🌸"; authBtn.textContent="Çıkış";
+    locked.style.display="none"; area.style.display="block";
+    who.textContent=name+", bu liste yalnızca senin.";
+    renderNotes();
+  } else {
+    label.textContent="Misafir"; authBtn.textContent="Giriş yap";
+    locked.style.display="block"; area.style.display="none"; who.textContent="";
+  }
+  renderFavs();
+}
+setMode("login");
+refreshUI();
+
+/* =========================================================
+   3.5) FAVORİLER (filmler / şarkılar / oyunlar)
+   ========================================================= */
+const FAV_CATS=[
+  {cat:"films", input:"filmInput", list:"filmsList", label:"🎬 Filmler"},
+  {cat:"songs", input:"songInput", list:"songsList", label:"🎵 Şarkılar"},
+  {cat:"games", input:"gameInput", list:"gamesList", label:"🎮 Oyunlar"}
+];
+function favData(){
+  if(current){
+    if(!users[current].favs) users[current].favs={films:[],songs:[],games:[]};
+    return users[current].favs;
+  }
+  return JSON.parse(localStorage.getItem("cc_favs_guest")||'{"films":[],"songs":[],"games":[]}');
+}
+function saveFav(data){
+  if(current){ users[current].favs=data; saveUsers(); }
+  else localStorage.setItem("cc_favs_guest", JSON.stringify(data));
+}
+function renderFavs(){
+  const data=favData();
+  FAV_CATS.forEach(({cat,list})=>{
+    const ul=document.getElementById(list);
+    ul.innerHTML="";
+    (data[cat]||[]).forEach((item,i)=>{
+      const li=document.createElement("li");
+      li.innerHTML=`<span class="txt">${item}</span><button class="del">×</button>`;
+      li.querySelector(".del").onclick=()=>{ const d=favData(); d[cat].splice(i,1); saveFav(d); renderFavs(); };
+      ul.appendChild(li);
+    });
+  });
+}
+FAV_CATS.forEach(({cat,input})=>{
+  const inp=document.getElementById(input);
+  const btn=document.querySelector(`button[data-cat="${cat}"]`);
+  function add(){
+    const t=inp.value.trim(); if(!t) return;
+    const d=favData(); d[cat].push(t); saveFav(d); inp.value=""; renderFavs();
+  }
+  btn.onclick=add;
+  inp.addEventListener("keydown",e=>{ if(e.key==="Enter") add(); });
+});
+const FORM_ENDPOINT="https://formspree.io/f/xkoaknng";
+const favStatus=document.getElementById("favStatus");
+document.getElementById("sendFavs").onclick=async ()=>{
+  const d=favData();
+  const total=d.films.length+d.songs.length+d.games.length;
+  if(!total){ favStatus.textContent="önce birkaç favori ekle 🌸"; return; }
+  let body="";
+  FAV_CATS.forEach(({cat,label})=>{
+    body+=label+"\n"+(d[cat].length? d[cat].map(x=>"• "+x).join("\n") : "—")+"\n\n";
+  });
+  const who=current?users[current].name:"(misafir)";
+  favStatus.textContent="gönderiliyor...";
+  try{
+    const r=await fetch(FORM_ENDPOINT,{
+      method:"POST",
+      headers:{"Accept":"application/json","Content-Type":"application/json"},
+      body:JSON.stringify({ _subject:"Favoriler 🌸", tur:"favoriler", kim:who, favoriler:body })
+    });
+    favStatus.textContent = r.ok ? "gönderildi ✅" : "bir sorun oldu, tekrar dener misin?";
+  }catch(_){ favStatus.textContent="bağlantı yok galiba, tekrar dene."; }
+};
+
+/* =========================================================
+   4) İLETİŞİM (e-posta)
+   ========================================================= */
+const contactForm=document.getElementById("contactForm");
+const contactStatus=document.getElementById("contactStatus");
+contactForm.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const name=document.getElementById("cName").value.trim();
+  const msg=document.getElementById("cMsg").value.trim();
+  if(!msg){ contactStatus.textContent="önce bir şeyler yaz 🙂"; return; }
+  contactStatus.textContent="gönderiliyor...";
+  try{
+    const r=await fetch(FORM_ENDPOINT,{
+      method:"POST",
+      headers:{"Accept":"application/json","Content-Type":"application/json"},
+      body:JSON.stringify({ _subject:"Siteden mesaj 🌸", tur:"iletişim", isim:name||"(belirtmedi)", mesaj:msg })
+    });
+    if(r.ok){ contactForm.reset(); contactStatus.textContent="gönderildi, teşekkürler ✅"; }
+    else { contactStatus.textContent="bir sorun oldu, tekrar dener misin?"; }
+  }catch(_){ contactStatus.textContent="bağlantı yok galiba, tekrar dene."; }
+});
+</script>
+</body>
+</html>
